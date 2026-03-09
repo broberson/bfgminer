@@ -224,8 +224,10 @@ IOUSBDeviceInterface300 ** _iokit_get_service_device(const io_service_t usb_svc)
 	SInt32 score;
 	IOUSBDeviceInterface300 ** usb_device;
 
-	IOCreatePlugInInterfaceForService(usb_svc, kIOUSBDeviceUserClientTypeID,
-									  kIOCFPlugInInterfaceID, &plugin, &score);
+	if(IOCreatePlugInInterfaceForService(usb_svc, kIOUSBDeviceUserClientTypeID,
+									  kIOCFPlugInInterfaceID, &plugin, &score) != 0) {
+		return NULL;
+	}
 	(*plugin)->QueryInterface(plugin,
 							  CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID300),
 							  (LPVOID)&usb_device);
